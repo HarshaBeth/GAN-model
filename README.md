@@ -22,7 +22,7 @@ The input shape in the Dense layer is ```input_shape=(100,)``` because we allow 
 
 Since we work with batches, we have to use BatchNormalization which will normalize our data during training and in batches instead of just normalizing once in the beginning. This helps act as a form of regularization.
 
-Lastly, in the last Dense layer we have activation as 'tanh' because this activation function will scale the output of this layer to be between -1 and 1.
+Lastly, in the last Dense layer we have ```activation='tanh'``` because this activation function will scale the output of this layer to be between -1 and 1.
 
 ```
 def build_generator():
