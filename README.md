@@ -65,6 +65,15 @@ def build_discriminator():
 
     return model
 ```
+# Building Complete GAN
 
+Lastly, we build our GAN as a whole, because within the GAN is where our **generator** will be trained to fool our discriminator. Whereas, our discriminator will be trained independently outside our GAN.
 
+```
+gan_model = Sequential([generator, discriminator])
+gan_model.compile(loss='binary_crossentropy', optimizer=Adam(0.0002, 0.5))
+```
+
+After this step, we load our MNIST dataset and normalize the data to be between -1 and 1, plus we add a channel dimension as the discriminator will require it. Now the shape of our dataset looks like 
+'(60000, 28, 28, 1)'.
 
