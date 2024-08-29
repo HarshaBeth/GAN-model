@@ -5,6 +5,10 @@ Generating realistic images has many useful impacts, such as creating immersive 
 
 ![image](https://github.com/user-attachments/assets/c2c00c1f-95e5-4165-8baa-8b438e0c8376)
 
+# Generated Images of Handwritten Digits
+![Generated Images](https://github.com/user-attachments/assets/7f55048b-dc3c-4266-9ca7-a55044f43006)
+
+
 <hr>
 
 Imported modules:
@@ -122,3 +126,5 @@ def train_gan(epochs, batch_size=128, save_interval=50, start_epoch=0):
 ```
 train_gan(epochs=10001, batch_size=64, save_interval=1000)
 ```
+
+
