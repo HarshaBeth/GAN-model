@@ -15,6 +15,8 @@ Imported modules:
 
 <br>
 
+# Building Generator
+
 The first step of building the GAN, is to have a generator that is able to generate random noise vectors and eventually learn to generate more realistic images that can fool the discriminator. Hence, to build our 
 generator I used Dense, LeakyReLU, BatchNormalization, and Reshape Layers. 
 
@@ -42,5 +44,9 @@ def build_generator():
 
     return model
 ```
+
+# Building Discriminator
+
+
 
 
