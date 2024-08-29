@@ -77,3 +77,48 @@ gan_model.compile(loss='binary_crossentropy', optimizer=Adam(0.0002, 0.5))
 After this step, we load our MNIST dataset and normalize the data to be between -1 and 1, plus we add a channel dimension as the discriminator will require it. Now the shape of our dataset looks like 
 '(60000, 28, 28, 1)'.
 
+
+# Training GAN Model
+
+We have reached our last step of the process, training our model! We choose random **real** images with the desired batch size from our complete training dataset. Next, we generate random noise and feed it to our generator to produce generated images. Moving forward, we train our discriminator with the real and fake images while giving them labels, this is how our discriminator will be trained independently.
+
+We have trained our discriminator, so the next step is to train our generator through the GAN model. We generate new noise again and feed it to the generator inside the GAN. The generator's task now is to generate new images that the discriminator will classify it as 'valid'.
+
+To ensure our progress, every 1,000 epochs I will save our generated images. Furthermore, as a safety measure, I checkpointed the weights of our generator and discriminator.
+
+```
+def train_gan(epochs, batch_size=128, save_interval=50, start_epoch=0):
+    valid = np.ones((batch_size, 1))    # Real Label
+    fake = np.zeros((batch_size, 1))    # Fake Label
+    if not os.path.exists('gan_checkpoints'):
+        os.makedirs('gan_checkpoints')
+
+    for epoch in range(start_epoch, epochs):
+        idx = np.random.randint(0, X_train.shape[0], batch_size)
+        print(f"Epoch: {epoch}")
+        real_imgs = X_train[idx]
+
+        # Generate fake images using our generator, we make 128 images each with 100 dimensions for noise
+        noise = np.random.normal(0, 1, (batch_size, 100))
+        gen_imgs = generator.predict(noise)
+        
+        # Train the discriminator on batches of real and fake images
+        d_loss_real = discriminator.train_on_batch(real_imgs, valid)
+        d_loss_fake = discriminator.train_on_batch(gen_imgs, fake)
+        d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+
+        noise = np.random.normal(0, 1, (batch_size, 100))
+        g_loss = gan_model.train_on_batch(noise, valid)
+
+        if epoch % save_interval == 0:
+            print(f"{epoch} [D_loss: {d_loss[0]}, acc.: {100 * d_loss[1]}%] [G loss: {g_loss}]]")
+            save_imgs(epoch, generator)
+            # Save weights
+            generator.save_weights(f'gan_checkpoints/generator_weights_epoch_{epoch}.weights.h5')
+            discriminator.save_weights(f'gan_checkpoints/discriminator_weights_epoch_{epoch}.weights.h5')
+
+```
+
+```
+train_gan(epochs=10001, batch_size=64, save_interval=1000)
+```
