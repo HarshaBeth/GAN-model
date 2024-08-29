@@ -16,7 +16,13 @@ Imported modules:
 <br>
 
 The first step of building the GAN, is to have a generator that is able to generate random noise vectors and eventually learn to generate more realistic images that can fool the discriminator. Hence, to build our 
-generator I used Dense, LeakyReLU, BatchNormalization, and Reshape Layers.
+generator I used Dense, LeakyReLU, BatchNormalization, and Reshape Layers. 
+
+The input shape in the Dense layer is ```input_shape=(100,)``` because we allow our model to generate noise in a 100 different "ways", eventually the generate can turn this noise into a meaningful image. Furthermore, we used LeakyReLU to avoid the "dead neurons" issue. If many neurons in the network have negative values, this causes the gradient to become zero, which will limit the capacity of the network and stop learning. Thus, the LeakyReLU prevents the nuerons from dying.
+
+Since we work with batches, we have to use BatchNormalization which will normalize our data during training and in batches instead of just normalizing once in the beginning. This helps act as a form of regularization.
+
+Lastly, in the last Dense layer we have activation as 'tanh' because this activation function will scale the output of this layer to be between -1 and 1.
 
 ```
 def build_generator():
@@ -36,3 +42,5 @@ def build_generator():
 
     return model
 ```
+
+
